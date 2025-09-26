@@ -55,6 +55,12 @@
       margin: 10px 0;
       font-weight: bold;
     }
+    footer {
+      margin-top: 25px;
+      font-size: 14px;
+      color: #fff;
+      text-align: center;
+    }
   </style>
 </head>
 <body>
@@ -69,6 +75,10 @@
     <p>Skor: <span id="score">10</span></p>
     <p>Highscore: <span id="highscore">0</span></p>
   </div>
+
+  <footer>
+    <p>© <span id="year"></span> Mini Game Tebak Angka | Dibuat oleh Yogi</p>
+  </footer>
 
   <script>
     let secretNumber = Math.floor(Math.random() * 20) + 1;
@@ -111,6 +121,9 @@
       document.getElementById("guess").value = "";
       document.body.style.background = "linear-gradient(135deg, #74ebd5, #9face6)";
     }
+
+    // Copyright dinamis (tahun otomatis)
+    document.getElementById("year").textContent = new Date().getFullYear();
   </script>
 </body>
 </html>
