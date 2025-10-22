@@ -75,17 +75,24 @@
             font-size: 1.2rem;
             font-weight: 700;
             cursor: pointer;
-            transition: transform 0.2s, background-color 0.2s, box-shadow 0.2s;
+            transition: transform 0.2s, background-color 0.2s, box-shadow 0.2s, opacity 0.2s;
             margin-top: 25px;
             text-transform: uppercase;
             letter-spacing: 1px;
             box-shadow: 0 4px 15px rgba(255, 87, 34, 0.4);
         }
 
-        .btn:hover {
+        .btn:hover:not(:disabled) {
             transform: scale(1.05);
             background-color: #e64a19;
             box-shadow: 0 6px 20px rgba(255, 87, 34, 0.6);
+        }
+        
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
         }
         
         /* Input Nama */
@@ -167,7 +174,7 @@
             box-shadow: 0 3px 0 rgba(0, 0, 0, 0.2);
         }
 
-        .answer-btn:active {
+        .answer-btn:active:not(:disabled) {
             transform: translateY(2px);
             box-shadow: 0 1px 0 rgba(0, 0, 0, 0.2);
         }
@@ -254,7 +261,7 @@
     <div id="quiz-screen" class="screen">
         <div class="quiz-header">
             <div class="question-info">
-                Question <span id="question-count">1 / 5</span>
+                Question <span id="question-count">1 / 20</span>
             </div>
             <div class="score-info">
                 Score: <span id="score">0</span>
@@ -292,7 +299,7 @@
     </div>
 
     <footer id="main-footer">
-        &copy; 2024 Quick Quiz. All rights reserved. | Created by Team TKJ Crewmate | YogiAbigail
+        &copy; 2024 Quick Quiz. All rights reserved. | Created by **Team TKJ Crewmate** | YogiAbigail
     </footer>
     <script>
         // --- QUESTION DATABASE (TOTAL 20 QUESTIONS) ---
@@ -528,9 +535,30 @@
             }
         }
         
+        // --- PERBAIKAN: FUNGSI VALIDASI NAMA ---
+        function checkNameInput() {
+            const nameValue = playerNameInput.value.trim();
+            if (nameValue === "") {
+                // Menonaktifkan tombol dan memberi feedback visual
+                joinButton.disabled = true; 
+                joinButton.style.opacity = 0.5;
+                joinButton.style.cursor = 'not-allowed';
+                joinButton.textContent = "Enter your name first!";
+            } else {
+                // Mengaktifkan tombol dan mereset tampilan
+                joinButton.disabled = false;
+                joinButton.style.opacity = 1;
+                joinButton.style.cursor = 'pointer';
+                joinButton.textContent = "Start Quiz!";
+            }
+        }
+        
         // --- GAME FUNCTIONS ---
 
         function startGame() {
+            // Memastikan nama sudah terisi sebelum memulai
+            if (joinButton.disabled) return; 
+
             playerName = playerNameInput.value.trim() || "Player";
             currentQuestionIndex = 0;
             score = 0;
@@ -590,6 +618,7 @@
             
             clearInterval(timerInterval);
             
+            // Set up a 1-second interval for tracking time left (scoring)
             timerInterval = setInterval(() => {
                 timeLeft--;
                 if (timeLeft <= 0) {
@@ -614,15 +643,14 @@
             answerButtons.forEach(btn => btn.disabled = true);
 
             if (isCorrect) {
-                selectedButton.classList.add('correct');
+                if (selectedButton) selectedButton.classList.add('correct');
                 // Calculate score: base score (500) + time bonus
                 let pointsEarned = 500 + (timeLeft * POINTS_PER_SECOND);
                 score += pointsEarned;
                 scoreEl.innerText = score;
             } else {
-                if (selectedButton) {
-                    selectedButton.classList.add('incorrect');
-                }
+                if (selectedButton) selectedButton.classList.add('incorrect');
+                
                 // Show the correct answer
                 answerButtons.forEach(btn => {
                     if (btn.dataset.correct === 'true') {
@@ -654,11 +682,17 @@
             finalScoreEl.innerText = score;
         }
 
-        // --- EVENT LISTENERS ---
+        // --- INITIAL SETUP AND EVENT LISTENERS (DILENGKAPI) ---
+        
+        // Inisialisasi: Periksa input nama saat halaman dimuat
+        checkNameInput(); 
 
         joinButton.addEventListener('click', startGame);
 
         playAgainButton.addEventListener('click', startGame);
+        
+        // Tambahkan event listener untuk memanggil fungsi validasi setiap kali input berubah
+        playerNameInput.addEventListener('input', checkNameInput);
 
         answerButtons.forEach(button => {
             button.addEventListener('click', selectAnswer);
