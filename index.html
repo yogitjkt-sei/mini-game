@@ -1,129 +1,1124 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mini Game - Tebak Angka</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      text-align: center;
-      background: linear-gradient(135deg, #74ebd5, #9face6);
-      height: 100vh;
-      margin: 0;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-    }
-    h1 {
-      color: #fff;
-      margin-bottom: 20px;
-      text-shadow: 2px 2px 5px rgba(0,0,0,0.3);
-    }
-    .game-box {
-      background: white;
-      padding: 20px 30px;
-      border-radius: 15px;
-      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-      max-width: 350px;
-    }
-    input {
-      padding: 10px;
-      border: 2px solid #6c63ff;
-      border-radius: 8px;
-      width: 100px;
-      text-align: center;
-      font-size: 16px;
-      margin-bottom: 10px;
-    }
-    button {
-      padding: 10px 15px;
-      margin: 5px;
-      border: none;
-      border-radius: 8px;
-      background: #6c63ff;
-      color: white;
-      font-size: 14px;
-      cursor: pointer;
-      transition: 0.3s;
-    }
-    button:hover {
-      background: #574bdb;
-    }
-    p {
-      margin: 10px 0;
-      font-weight: bold;
-    }
-    footer {
-      margin-top: 25px;
-      font-size: 14px;
-      color: #fff;
-      text-align: center;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quick Quiz ✨</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
+
+    <style>
+        /* Pengaturan Dasar dan Reset */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif, Arial;
+            background: linear-gradient(135deg, #0f4c75, #3282b8);
+            color: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow: hidden;
+            transition: background-color 0.5s;
+        }
+
+        /* Container Utama */
+        .screen {
+            display: none;
+            width: 95%;
+            max-width: 600px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 40px;
+            border-radius: 25px;
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            animation: fadeIn 0.5s ease-in-out;
+            /* Tambah margin bawah agar konten tidak tertutup footer */
+            margin-bottom: 50px; 
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .screen.active {
+            display: block;
+        }
+        
+        /* DESAIN LOGO GAMBAR (IMG) */
+        #logo-placeholder {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 30px;
+            border-radius: 50%;
+            object-fit: cover;
+            padding: 8px;
+            background-color: #ff5722;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.3), 0 0 0 8px rgba(255, 255, 255, 0.2);
+            border: 2px solid #ffffff;
+        }
+
+        /* Tombol Utama (Start, Play Again) */
+        .btn {
+            background-color: #ff5722;
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 50px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: transform 0.2s, background-color 0.2s, box-shadow 0.2s;
+            margin-top: 25px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 15px rgba(255, 87, 34, 0.4);
+        }
+
+        .btn:hover {
+            transform: scale(1.05);
+            background-color: #e64a19;
+            box-shadow: 0 6px 20px rgba(255, 87, 34, 0.6);
+        }
+        
+        /* Input Nama */
+        #player-name {
+            background: rgba(255, 255, 255, 0.8);
+            color: #333;
+            width: 100%;
+            padding: 15px;
+            font-size: 1.1rem;
+            border-radius: 10px;
+            border: none;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        /* Layar Kuis Header */
+        .quiz-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            padding: 0 5px;
+        }
+
+        /* Timer Bar */
+        #timer-bar {
+            height: 8px;
+            background-color: rgba(255, 255, 255, 0.2);
+            border-radius: 4px;
+            margin-bottom: 30px;
+            overflow: hidden;
+        }
+
+        #timer-bar-fill {
+            height: 100%;
+            width: 100%;
+            background-color: #ffee58;
+            transition: width 0.1s linear;
+        }
+
+        /* Pertanyaan */
+        #question-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 30px;
+            min-height: 80px;
+            line-height: 1.4;
+            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Grid Jawaban */
+        .answer-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px;
+        }
+        @media (min-width: 500px) {
+            .answer-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        /* Tombol Jawaban */
+        .answer-btn {
+            color: white;
+            border: none;
+            border-radius: 10px;
+            padding: 15px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: transform 0.1s, opacity 0.1s, box-shadow 0.1s;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            text-align: left;
+            min-height: 65px;
+            box-shadow: 0 3px 0 rgba(0, 0, 0, 0.2);
+        }
+
+        .answer-btn:active {
+            transform: translateY(2px);
+            box-shadow: 0 1px 0 rgba(0, 0, 0, 0.2);
+        }
+
+        .answer-btn:disabled {
+            cursor: default;
+            opacity: 0.6;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .answer-btn span:first-child {
+            font-size: 1.5rem;
+            margin-right: 15px;
+            line-height: 1;
+        }
+        .answer-btn .answer-text {
+            flex-grow: 1;
+        }
+
+        /* Warna Tombol Jawaban (Dipersonalisasi) */
+        #btn-0 { background-color: #e53935; }
+        #btn-1 { background-color: #1e88e5; }
+        #btn-2 { background-color: #fdd835; color: #333;}
+        #btn-3 { background-color: #43a047; }
+
+        /* Feedback (Koreksi) */
+        .answer-btn.correct {
+            background-color: #66bb6a !important;
+            transform: scale(1.02);
+            border: 3px solid #ffee58;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+        }
+
+        .answer-btn.incorrect {
+            background-color: #ef5350 !important;
+            opacity: 0.8;
+        }
+
+        /* Layar Hasil */
+        #results-screen h1 {
+            font-size: 3rem;
+            margin-bottom: 5px;
+            font-weight: 900;
+        }
+        #results-screen h2 {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+        }
+        #final-score {
+            font-size: 6rem;
+            color: #ffee58;
+            font-weight: 900;
+            text-shadow: 0 5px 10px rgba(0, 0, 0, 0.5);
+        }
+        
+        /* 🔥 STYLING BARU UNTUK COPYRIGHT FOOTER 🔥 */
+        #main-footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            padding: 10px 20px;
+            text-align: center;
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.7);
+            background: rgba(0, 0, 0, 0.15); /* Transparan gelap */
+            backdrop-filter: blur(5px);
+            z-index: 100;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.2);
+        }
+    </style>
 </head>
 <body>
-  <h1>🎮 Mini Game Tebak Angka 🎲</h1>
-  <div class="game-box">
-    <p>Saya menyimpan angka antara <strong>1 - 20</strong>.<br>Coba tebak!</p>
-    <input type="number" id="guess" placeholder="Tebakan" min="1" max="20">
-    <br>
-    <button onclick="checkGuess()">Tebak!</button>
-    <button onclick="resetGame()">Ulangi</button>
-    <p id="message"></p>
-    <p>Skor: <span id="score">10</span></p>
-    <p>Highscore: <span id="highscore">0</span></p>
-  </div>
 
-  <footer>
-    <p>© <span id="year"></span> Mini Game Tebak Angka | Dibuat oleh Yogi</p>
-  </footer>
+    <div id="lobby-screen" class="screen active">
+        <img id="logo-placeholder" src="https://files.catbox.moe/j6ypiu.jpg" alt="Quiz Logo">
+        
+        <h1>Quick Quiz ✨</h1>
+        <input type="text" id="player-name" placeholder="Enter your name..." required>
+        <button id="join-btn" class="btn">Start Quiz!</button>
+    </div>
 
-  <script>
-    let secretNumber = Math.floor(Math.random() * 20) + 1;
-    let score = 10;
-    let highscore = 0;
+    <div id="quiz-screen" class="screen">
+        <div class="quiz-header">
+            <div class="question-info">
+                Question <span id="question-count">1 / 20</span> </div>
+            <div class="score-info">
+                Score: <span id="score">0</span>
+            </div>
+        </div>
 
-    function checkGuess() {
-      const guess = Number(document.getElementById("guess").value);
-      const message = document.getElementById("message");
+        <div id="timer-bar">
+            <div id="timer-bar-fill"></div>
+        </div>
 
-      if (!guess) {
-        message.textContent = "⛔ Masukkan angka!";
-        return;
-      }
+        <h2 id="question-title">This is the question text?</h2>
 
-      if (guess === secretNumber) {
-        message.textContent = "🎉 Benar! Angkanya adalah " + secretNumber;
-        document.body.style.background = "linear-gradient(135deg, #ff9a9e, #fad0c4)";
-        if (score > highscore) {
-          highscore = score;
-          document.getElementById("highscore").textContent = highscore;
+        <div class="answer-grid">
+            <button class="answer-btn" id="btn-0">
+                <span>A</span> <span class="answer-text">Answer 1</span>
+            </button>
+            <button class="answer-btn" id="btn-1">
+                <span>B</span> <span class="answer-text">Answer 2</span>
+            </button>
+            <button class="answer-btn" id="btn-2">
+                <span>C</span> <span class="answer-text">Answer 3</span>
+            </button>
+            <button class="answer-btn" id="btn-3">
+                <span>D</span> <span class="answer-text">Answer 4</span>
+            </button>
+        </div>
+    </div>
+
+    <div id="results-screen" class="screen">
+        <h1>🎉 Quiz Finished! 🎉</h1>
+        <h2 id="player-name-final">Hello, Player!</h2>
+        <h3>Your Final Score:</h3>
+        <h1 id="final-score">0</h1>
+        <button id="play-again-btn" class="btn">Play Again</button>
+    </div>
+
+    <footer id="main-footer">
+        &copy; 2024 Quick Quiz. All rights reserved. | Created by **Team TKJ Crewmate**
+    </footer>
+    <script>
+        // --- QUESTION DATABASE (TOTAL 50 QUESTIONS) ---
+        // Questions are about General Knowledge and IT/TKJ related topics.
+        const allQuestions = [
+            {
+                question: "Which one is NOT a fruit?",
+                answers: [
+                    { text: "Apple", correct: false },
+                    { text: "Carrot", correct: true },
+                    { text: "Banana", correct: false },
+                    { text: "Orange", correct: false }
+                ]
+            },
+            {
+                question: "What is the capital city of Japan?",
+                answers: [
+                    { text: "Beijing", correct: false },
+                    { text: "Seoul", correct: false },
+                    { text: "Tokyo", correct: true },
+                    { text: "Bangkok", correct: false }
+                ]
+            },
+            {
+                question: "How many days are in a week?",
+                answers: [
+                    { text: "5", correct: false },
+                    { text: "6", correct: false },
+                    { text: "7", correct: true },
+                    { text: "8", correct: false }
+                ]
+            },
+            {
+                question: "What is the largest organ in the human body?",
+                answers: [
+                    { text: "Heart", correct: false },
+                    { text: "Liver", correct: false },
+                    { text: "Skin", correct: true },
+                    { text: "Brain", correct: false }
+                ]
+            },
+            {
+                question: "What is 10 + 15?",
+                answers: [
+                    { text: "20", correct: false },
+                    { text: "30", correct: false },
+                    { text: "25", correct: true },
+                    { text: "15", correct: false }
+                ]
+            },
+            {
+                question: "Which planet is known as the 'Red Planet'?",
+                answers: [
+                    { text: "Jupiter", correct: false },
+                    { text: "Venus", correct: false },
+                    { text: "Mars", correct: true },
+                    { text: "Saturn", correct: false }
+                ]
+            },
+            {
+                question: "Who invented the light bulb?",
+                answers: [
+                    { text: "Nikola Tesla", correct: false },
+                    { text: "Thomas Edison", correct: true },
+                    { text: "Albert Einstein", correct: false },
+                    { text: "Isaac Newton", correct: false }
+                ]
+            },
+            {
+                question: "What does 'HTML' stand for?",
+                answers: [
+                    { text: "Hyper Trainer Markup Language", correct: false },
+                    { text: "Hyper Text Markup Language", correct: true },
+                    { text: "High Tech Modern Language", correct: false },
+                    { text: "Home Tool Markup Language", correct: false }
+                ]
+            },
+            {
+                question: "How many colors are in a rainbow?",
+                answers: [
+                    { text: "5", correct: false },
+                    { text: "6", correct: false },
+                    { text: "7", correct: true },
+                    { text: "8", correct: false }
+                ]
+            },
+            {
+                question: "Which animal is known as the 'King of the Jungle'?",
+                answers: [
+                    { text: "Tiger", correct: false },
+                    { text: "Elephant", correct: false },
+                    { text: "Lion", correct: true },
+                    { text: "Bear", correct: false }
+                ]
+            },
+            {
+                question: "Which continent is the country of Egypt located in?",
+                answers: [
+                    { text: "Asia", correct: false },
+                    { text: "Europe", correct: false },
+                    { text: "Africa", correct: true },
+                    { text: "America", correct: false }
+                ]
+            },
+            {
+                question: "What is the currency of the United Kingdom?",
+                answers: [
+                    { text: "Dollar", correct: false },
+                    { text: "Euro", correct: false },
+                    { text: "Pound Sterling", correct: true },
+                    { text: "Yen", correct: false }
+                ]
+            },
+            {
+                question: "Water boils at what temperature in Celsius?",
+                answers: [
+                    { text: "0°C", correct: false },
+                    { text: "50°C", correct: false },
+                    { text: "100°C", correct: true },
+                    { text: "200°C", correct: false }
+                ]
+            },
+            {
+                question: "What is the chemical element symbolized by 'O'?",
+                answers: [
+                    { text: "Gold", correct: false },
+                    { text: "Oxygen", correct: true },
+                    { text: "Iron", correct: false },
+                    { text: "Silver", correct: false }
+                ]
+            },
+            {
+                question: "Which superhero wears a red and blue costume and can fly?",
+                answers: [
+                    { text: "Batman", correct: false },
+                    { text: "Spider-Man", correct: false },
+                    { text: "Superman", correct: true },
+                    { text: "Wonder Woman", correct: false }
+                ]
+            },
+            {
+                question: "The famous iron lattice tower in Paris is called...",
+                answers: [
+                    { text: "Great Wall of China", correct: false },
+                    { text: "Leaning Tower of Pisa", correct: false },
+                    { text: "Eiffel Tower", correct: true },
+                    { text: "Statue of Liberty", correct: false }
+                ]
+            },
+            {
+                question: "What is the result of $7 \times 8$?",
+                answers: [
+                    { text: "49", correct: false },
+                    { text: "56", correct: true },
+                    { text: "64", correct: false },
+                    { text: "72", correct: false }
+                ]
+            },
+            {
+                question: "What is the capital city of Australia?",
+                answers: [
+                    { text: "Sydney", correct: false },
+                    { text: "Melbourne", correct: false },
+                    { text: "Canberra", correct: true },
+                    { text: "Perth", correct: false }
+                ]
+            },
+            {
+                question: "What is the longest bone in the human body?",
+                answers: [
+                    { text: "Ulna", correct: false },
+                    { text: "Radius", correct: false },
+                    { text: "Femur (Thigh bone)", correct: true },
+                    { text: "Tibia", correct: false }
+                ]
+            },
+            {
+                question: "Which of the following is NOT a web browser?",
+                answers: [
+                    { text: "Mozilla Firefox", correct: false },
+                    { text: "Microsoft Word", correct: true },
+                    { text: "Google Chrome", correct: false },
+                    { text: "Safari", correct: false }
+                ]
+            },
+            
+            // --- 30 NEW QUESTIONS (IT/GENERAL KNOWLEDGE) ---
+            {
+                question: "What is the default port number for HTTP?",
+                answers: [
+                    { text: "21", correct: false },
+                    { text: "80", correct: true },
+                    { text: "443", correct: false },
+                    { text: "23", correct: false }
+                ]
+            },
+            {
+                question: "What is a major characteristic of a **router**?",
+                answers: [
+                    { text: "Connects devices in a single LAN", correct: false },
+                    { text: "Directs data packets between computer networks", correct: true },
+                    { text: "Amplifies the signal in a network cable", correct: false },
+                    { text: "Translates domain names to IP addresses", correct: false }
+                ]
+            },
+            {
+                question: "What does **RAM** stand for in computing?",
+                answers: [
+                    { text: "Read-Access Memory", correct: false },
+                    { text: "Random Access Module", correct: false },
+                    { text: "Read-Only Memory", correct: false },
+                    { text: "Random Access Memory", correct: true }
+                ]
+            },
+            {
+                question: "Which protocol is used for sending email?",
+                answers: [
+                    { text: "POP3", correct: false },
+                    { text: "IMAP", correct: false },
+                    { text: "SMTP", correct: true },
+                    { text: "FTP", correct: false }
+                ]
+            },
+            {
+                question: "What is the main purpose of a firewall?",
+                answers: [
+                    { text: "To increase internet speed", correct: false },
+                    { text: "To prevent unauthorized access to a network", correct: true },
+                    { text: "To store system data", correct: false },
+                    { text: "To display graphics on a monitor", correct: false }
+                ]
+            },
+            {
+                question: "What is the maximum speed of a Fast Ethernet connection?",
+                answers: [
+                    { text: "10 Mbps", correct: false },
+                    { text: "100 Mbps", correct: true },
+                    { text: "1 Gbps", correct: false },
+                    { text: "10 Gbps", correct: false }
+                ]
+            },
+            {
+                question: "In networking, what does **DNS** translate?",
+                answers: [
+                    { text: "Data to Binary", correct: false },
+                    { text: "Domain Names to IP Addresses", correct: true },
+                    { text: "Text to Voice", correct: false },
+                    { text: "URL to HTML", correct: false }
+                ]
+            },
+            {
+                question: "Which type of cable is most commonly used for long-distance data transmission?",
+                answers: [
+                    { text: "Coaxial Cable", correct: false },
+                    { text: "Twisted-Pair Cable", correct: false },
+                    { text: "Fiber Optic Cable", correct: true },
+                    { text: "USB Cable", correct: false }
+                ]
+            },
+            {
+                question: "Which programming language is mainly used for styling web pages?",
+                answers: [
+                    { text: "JavaScript", correct: false },
+                    { text: "Python", correct: false },
+                    { text: "CSS", correct: true },
+                    { text: "PHP", correct: false }
+                ]
+            },
+            {
+                question: "What is the primary function of a **CPU**?",
+                answers: [
+                    { text: "Storing data permanently", correct: false },
+                    { text: "Executing instructions and performing calculations", correct: true },
+                    { text: "Displaying the graphical interface", correct: false },
+                    { text: "Connecting to the internet", correct: false }
+                ]
+            },
+            {
+                question: "What is the function of the **ping** command?",
+                answers: [
+                    { text: "Transferring files", correct: false },
+                    { text: "Checking network connectivity", correct: true },
+                    { text: "Configuring a router", correct: false },
+                    { text: "Encrypting data packets", correct: false }
+                ]
+            },
+            {
+                question: "What layer of the OSI model is responsible for logical addressing (IP addresses)?",
+                answers: [
+                    { text: "Physical Layer", correct: false },
+                    { text: "Data Link Layer", correct: false },
+                    { text: "Network Layer", correct: true },
+                    { text: "Transport Layer", correct: false }
+                ]
+            },
+            {
+                question: "What is the term for a malicious program that replicates itself and spreads to other computers?",
+                answers: [
+                    { text: "Trojan Horse", correct: false },
+                    { text: "Spyware", correct: false },
+                    { text: "Virus", correct: true },
+                    { text: "Adware", correct: false }
+                ]
+            },
+            {
+                question: "Which web address component specifies the type of organization (e.g., commercial)?",
+                answers: [
+                    { text: "Protocol (e.g., http://)", correct: false },
+                    { text: "Subdomain (e.g., www.)", correct: false },
+                    { text: "Top-Level Domain (e.g., .com)", correct: true },
+                    { text: "Path (e.g., /index.html)", correct: false }
+                ]
+            },
+            {
+                question: "What is the purpose of **DHCP** in a network?",
+                answers: [
+                    { text: "Encrypting network traffic", correct: false },
+                    { text: "Assigning IP addresses automatically", correct: true },
+                    { text: "Monitoring web usage", correct: false },
+                    { text: "Blocking malicious websites", correct: false }
+                ]
+            },
+            {
+                question: "Which storage device is generally faster: HDD or SSD?",
+                answers: [
+                    { text: "HDD (Hard Disk Drive)", correct: false },
+                    { text: "SSD (Solid State Drive)", correct: true },
+                    { text: "They are the same speed", correct: false },
+                    { text: "CD-ROM", correct: false }
+                ]
+            },
+            {
+                question: "Which port is commonly used for secure web browsing (HTTPS)?",
+                answers: [
+                    { text: "80", correct: false },
+                    { text: "443", correct: true },
+                    { text: "25", correct: false },
+                    { text: "21", correct: false }
+                ]
+            },
+            {
+                question: "What is a 'Bug' in programming?",
+                answers: [
+                    { text: "A feature that users love", correct: false },
+                    { text: "An error or fault in a computer program", correct: true },
+                    { text: "A type of database", correct: false },
+                    { text: "The name of a popular website", correct: false }
+                ]
+            },
+            {
+                question: "What does **ISP** stand for?",
+                answers: [
+                    { text: "Internal Server Protocol", correct: false },
+                    { text: "Internet Service Provider", correct: true },
+                    { text: "Information Security Policy", correct: false },
+                    { text: "Integrated System Performance", correct: false }
+                ]
+            },
+            {
+                question: "What is the binary representation of the decimal number **5**?",
+                answers: [
+                    { text: "1010", correct: false },
+                    { text: "0101", correct: false },
+                    { text: "101", correct: true },
+                    { text: "110", correct: false }
+                ]
+            },
+            {
+                question: "Which one is an operating system?",
+                answers: [
+                    { text: "Adobe Photoshop", correct: false },
+                    { text: "Microsoft Excel", correct: false },
+                    { text: "Linux", correct: true },
+                    { text: "Google Chrome", correct: false }
+                ]
+            },
+            {
+                question: "What is the standard twisted-pair cable connector for Ethernet?",
+                answers: [
+                    { text: "VGA", correct: false },
+                    { text: "HDMI", correct: false },
+                    { text: "RJ-45", correct: true },
+                    { text: "USB-C", correct: false }
+                ]
+            },
+            {
+                question: "What is the term for converting human-readable data into an unreadable format to secure it?",
+                answers: [
+                    { text: "Compression", correct: false },
+                    { text: "Decryption", correct: false },
+                    { text: "Encryption", correct: true },
+                    { text: "Encoding", correct: false }
+                ]
+            },
+            {
+                question: "Which component is often considered the 'brain' of the computer?",
+                answers: [
+                    { text: "GPU", correct: false },
+                    { text: "RAM", correct: false },
+                    { text: "CPU", correct: true },
+                    { text: "Hard Drive", correct: false }
+                ]
+            },
+            {
+                question: "What does **Wi-Fi** primarily use to transmit data?",
+                answers: [
+                    { text: "Infrared light", correct: false },
+                    { text: "Radio waves", correct: true },
+                    { text: "Laser beams", correct: false },
+                    { text: "Coaxial cable", correct: false }
+                ]
+            },
+            {
+                question: "What is the decimal equivalent of the binary number **10**?",
+                answers: [
+                    { text: "1", correct: false },
+                    { text: "2", correct: true },
+                    { text: "3", correct: false },
+                    { text: "10", correct: false }
+                ]
+            },
+            {
+                question: "What is the name of the worldwide system of interconnected computer networks?",
+                answers: [
+                    { text: "Intranet", correct: false },
+                    { text: "Ethernet", correct: false },
+                    { text: "The Internet", correct: true },
+                    { text: "Local Area Network", correct: false }
+                ]
+            },
+            {
+                question: "Which of these is a popular version control system?",
+                answers: [
+                    { text: "Apache", correct: false },
+                    { text: "MySQL", correct: false },
+                    { text: "Git", correct: true },
+                    { text: "Node.js", correct: false }
+                ]
+            },
+            {
+                question: "What is the smallest unit of digital information?",
+                answers: [
+                    { text: "Byte", correct: false },
+                    { text: "Kilobyte", correct: false },
+                    { text: "Bit", correct: true },
+                    { text: "Gigabyte", correct: false }
+                ]
+            },
+            {
+                question: "What is the purpose of the 'break' statement in programming loops?",
+                answers: [
+                    { text: "To skip the current iteration", correct: false },
+                    { text: "To start a new loop", correct: false },
+                    { text: "To immediately exit the loop", correct: true },
+                    { text: "To print a message", correct: false }
+                ]
+            },
+            {
+                question: "What type of connector is typically used for a modern computer monitor?",
+                answers: [
+                    { text: "RJ-45", correct: false },
+                    { text: "PS/2", correct: false },
+                    { text: "HDMI / DisplayPort", correct: true },
+                    { text: "Parallel Port", correct: false }
+                ]
+            },
+            {
+                question: "The term **LAN** stands for...",
+                answers: [
+                    { text: "Large Area Network", correct: false },
+                    { text: "Local Area Network", correct: true },
+                    { text: "Long Access Node", correct: false },
+                    { text: "Limited Access Network", correct: false }
+                ]
+            },
+            {
+                question: "What is Phishing?",
+                answers: [
+                    { text: "A type of computer virus", correct: false },
+                    { text: "Sending fake emails to trick users into revealing information", correct: true },
+                    { text: "A network cable standard", correct: false },
+                    { text: "The process of debugging code", correct: false }
+                ]
+            },
+            {
+                question: "Which command-line utility shows the route a packet takes to reach a host?",
+                answers: [
+                    { text: "ipconfig", correct: false },
+                    { text: "ping", correct: false },
+                    { text: "tracert (traceroute)", correct: true },
+                    { text: "netstat", correct: false }
+                ]
+            },
+            {
+                question: "What is the main function of the **BIOS**?",
+                answers: [
+                    { text: "To store user files", correct: false },
+                    { text: "To load the operating system when the computer starts", correct: true },
+                    { text: "To manage all running applications", correct: false },
+                    { text: "To display 3D graphics", correct: false }
+                ]
+            },
+            {
+                question: "What does **PDF** stand for?",
+                answers: [
+                    { text: "Public Data File", correct: false },
+                    { text: "Portable Document Format", correct: true },
+                    { text: "Program Data File", correct: false },
+                    { text: "Printer Display Function", correct: false }
+                ]
+            },
+            {
+                question: "Which device operates at Layer 2 (Data Link) of the OSI model?",
+                answers: [
+                    { text: "Router", correct: false },
+                    { text: "Hub", correct: false },
+                    { text: "Switch", correct: true },
+                    { text: "Gateway", correct: false }
+                ]
+            },
+            {
+                question: "What is a **variable** in programming?",
+                answers: [
+                    { text: "A type of error", correct: false },
+                    { text: "A reserved keyword", correct: false },
+                    { text: "A storage location for data values", correct: true },
+                    { text: "A function name", correct: false }
+                ]
+            },
+            {
+                question: "Which cloud service model provides networking, storage, and operating systems, but not applications?",
+                answers: [
+                    { text: "SaaS (Software as a Service)", correct: false },
+                    { text: "PaaS (Platform as a Service)", correct: false },
+                    { text: "IaaS (Infrastructure as a Service)", correct: true },
+                    { text: "FaaS (Function as a Service)", correct: false }
+                ]
+            },
+            {
+                question: "What term describes the unauthorized act of gaining access to a computer system or network?",
+                answers: [
+                    { text: "Debugging", correct: false },
+                    { text: "Hacking", correct: true },
+                    { text: "Compiling", correct: false },
+                    { text: "Cloning", correct: false }
+                ]
+            },
+            {
+                question: "Which company created the **Android** operating system?",
+                answers: [
+                    { text: "Apple", correct: false },
+                    { text: "Microsoft", correct: false },
+                    { text: "Google", correct: true },
+                    { text: "Samsung", correct: false }
+                ]
+            },
+            {
+                question: "What is the file extension for a standard Python source code file?",
+                answers: [
+                    { text: ".html", correct: false },
+                    { text: ".py", correct: true },
+                    { text: ".js", correct: false },
+                    { text: ".cpp", correct: false }
+                ]
+            },
+            {
+                question: "Which part of the URL specifies the resource location on the server?",
+                answers: [
+                    { text: "Domain Name", correct: false },
+                    { text: "Protocol", correct: false },
+                    { text: "Path", correct: true },
+                    { text: "Port Number", correct: false }
+                ]
+            },
+            {
+                question: "What is the process of finding and fixing errors in code called?",
+                answers: [
+                    { text: "Compiling", correct: false },
+                    { text: "Executing", correct: false },
+                    { text: "Debugging", correct: true },
+                    { text: "Integrating", correct: false }
+                ]
+            },
+            {
+                question: "Which of the following is an example of a **NoSQL** database?",
+                answers: [
+                    { text: "PostgreSQL", correct: false },
+                    { text: "Microsoft SQL Server", correct: false },
+                    { text: "MySQL", correct: false },
+                    { text: "MongoDB", correct: true }
+                ]
+            },
+            {
+                question: "What is a **malware** that holds data hostage and demands payment?",
+                answers: [
+                    { text: "Adware", correct: false },
+                    { text: "Ransomware", correct: true },
+                    { text: "Worm", correct: false },
+                    { text: "Rootkit", correct: false }
+                ]
+            },
+            {
+                question: "What is the maximum number of devices that can connect to a Wi-Fi access point simultaneously?",
+                answers: [
+                    { text: "5", correct: false },
+                    { text: "10", correct: false },
+                    { text: "Depends on the device/router capacity", correct: true },
+                    { text: "Unlimited", correct: false }
+                ]
+            },
+            {
+                question: "What is the function of the **alt** attribute in an HTML image tag (`<img>`)?",
+                answers: [
+                    { text: "Specifies the image size", correct: false },
+                    { text: "Sets the border color", correct: false },
+                    { text: "Provides alternative text for screen readers/when image fails to load", correct: true },
+                    { text: "Defines the image source", correct: false }
+                ]
+            },
+            {
+                question: "Which CSS property is used to change the background color of an element?",
+                answers: [
+                    { text: "color", correct: false },
+                    { text: "text-align", correct: false },
+                    { text: "background-color", correct: true },
+                    { text: "font-size", correct: false }
+                ]
+            },
+            {
+                question: "In JavaScript, which keyword is used to declare a block-scoped variable?",
+                answers: [
+                    { text: "var", correct: false },
+                    { text: "const", correct: true },
+                    { text: "new", correct: false },
+                    { text: "function", correct: false }
+            }
+        ];
+
+        // --- GAME SETTINGS ---
+        const QUESTIONS_TO_ASK = 20; // Ditetapkan menjadi 20
+        const QUESTION_TIME_LIMIT = 10;
+        const POINTS_PER_SECOND = 50;
+
+        // --- HTML ELEMENTS ---
+        const lobbyScreen = document.getElementById('lobby-screen');
+        const quizScreen = document.getElementById('quiz-screen');
+        const resultsScreen = document.getElementById('results-screen');
+
+        const joinButton = document.getElementById('join-btn');
+        const playAgainButton = document.getElementById('play-again-btn');
+
+        const playerNameInput = document.getElementById('player-name');
+        const playerNameFinal = document.getElementById('player-name-final');
+        const finalScoreEl = document.getElementById('final-score');
+
+        const questionCountEl = document.getElementById('question-count');
+        const scoreEl = document.getElementById('score');
+        const questionTitleEl = document.getElementById('question-title');
+
+        const timerBarFill = document.getElementById('timer-bar-fill');
+
+        const answerButtons = document.querySelectorAll('.answer-btn');
+        const allAnswerButtons = [
+            document.getElementById('btn-0'),
+            document.getElementById('btn-1'),
+            document.getElementById('btn-2'),
+            document.getElementById('btn-3')
+        ];
+
+        // --- GAME VARIABLES ---
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let timeLeft = QUESTION_TIME_LIMIT;
+        let timerInterval = null;
+        let playerName = "Player";
+        let currentQuizQuestions = []; // New array to hold the 20 selected questions
+        
+        const answerSymbols = ['A', 'B', 'C', 'D'];
+
+
+        // --- UTILITY FUNCTION (Shuffle) ---
+        
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
         }
-      } else if (guess !== secretNumber) {
-        if (score > 1) {
-          message.textContent = guess > secretNumber ? "📉 Terlalu besar!" : "📈 Terlalu kecil!";
-          score--;
-          document.getElementById("score").textContent = score;
-        } else {
-          message.textContent = "💥 Kamu kalah!";
-          document.getElementById("score").textContent = 0;
+        
+        // --- GAME FUNCTIONS ---
+
+        function startGame() {
+            playerName = playerNameInput.value.trim() || "Player";
+            currentQuestionIndex = 0;
+            score = 0;
+            
+            // 1. Shuffle ALL questions
+            shuffleArray(allQuestions);
+            
+            // 2. Select only the first 'QUESTIONS_TO_ASK' questions (which are now random)
+            currentQuizQuestions = allQuestions.slice(0, QUESTIONS_TO_ASK);
+            
+            lobbyScreen.classList.remove('active');
+            resultsScreen.classList.remove('active');
+            quizScreen.classList.add('active');
+            
+            loadQuestion();
         }
-      }
-    }
 
-    function resetGame() {
-      score = 10;
-      secretNumber = Math.floor(Math.random() * 20) + 1;
-      document.getElementById("score").textContent = score;
-      document.getElementById("message").textContent = "";
-      document.getElementById("guess").value = "";
-      document.body.style.background = "linear-gradient(135deg, #74ebd5, #9face6)";
-    }
+        function loadQuestion() {
+            resetFeedback();
+            
+            // Check against the length of the SELECTED questions
+            if (currentQuestionIndex >= currentQuizQuestions.length) {
+                showResults();
+                return;
+            }
+            
+            let currentQuestion = currentQuizQuestions[currentQuestionIndex];
+            
+            // Shuffle the answers order for the current question
+            shuffleArray(currentQuestion.answers);
+            
+            questionTitleEl.innerText = currentQuestion.question;
+            // Display question count: (Question X / Total Questions)
+            questionCountEl.innerText = `${currentQuestionIndex + 1} / ${currentQuizQuestions.length}`; 
+            scoreEl.innerText = score;
+            
+            for (let i = 0; i < currentQuestion.answers.length; i++) {
+                const answer = currentQuestion.answers[i];
+                const button = allAnswerButtons[i]; 
+                
+                button.querySelector('span:first-child').innerText = answerSymbols[i];
+                button.querySelector('.answer-text').innerText = answer.text;
+                button.dataset.correct = answer.correct;
+            }
+            
+            startTimer();
+        }
 
-    // Copyright dinamis (tahun otomatis)
-    document.getElementById("year").textContent = new Date().getFullYear();
-  </script>
+        function startTimer() {
+            timeLeft = QUESTION_TIME_LIMIT;
+            timerBarFill.style.width = '100%';
+            timerBarFill.style.transition = 'none'; 
+            
+            // Force reflow/repaint to reset transition
+            void timerBarFill.offsetWidth; 
+            
+            // Set transition for the countdown animation
+            timerBarFill.style.transition = `width ${QUESTION_TIME_LIMIT}s linear`;
+            timerBarFill.style.width = '0%';
+            
+            clearInterval(timerInterval);
+            
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    selectAnswer(null); // Time out = wrong answer
+                }
+            }, 1000);
+        }
+
+        function selectAnswer(e) {
+            clearInterval(timerInterval);
+            
+            let isCorrect = false;
+            let selectedButton = null;
+
+            if (e) {
+                selectedButton = e.currentTarget;
+                isCorrect = selectedButton.dataset.correct === 'true';
+            }
+
+            // Disable all buttons after one answer is selected
+            answerButtons.forEach(btn => btn.disabled = true);
+
+            if (isCorrect) {
+                selectedButton.classList.add('correct');
+                // Calculate score: base score (500) + time bonus
+                let pointsEarned = 500 + (timeLeft * POINTS_PER_SECOND);
+                score += pointsEarned;
+                scoreEl.innerText = score;
+            } else {
+                if (selectedButton) {
+                    selectedButton.classList.add('incorrect');
+                }
+                // Show the correct answer
+                answerButtons.forEach(btn => {
+                    if (btn.dataset.correct === 'true') {
+                        btn.classList.add('correct');
+                    }
+                });
+            }
+            
+            // Move to the next question after 2 seconds
+            setTimeout(() => {
+                currentQuestionIndex++;
+                loadQuestion();
+            }, 2000);
+        }
+
+        function resetFeedback() {
+            answerButtons.forEach(btn => {
+                btn.disabled = false;
+                btn.classList.remove('correct');
+                btn.classList.remove('incorrect');
+            });
+        }
+
+        function showResults() {
+            quizScreen.classList.remove('active');
+            resultsScreen.classList.add('active');
+            
+            playerNameFinal.innerText = `Congratulations, ${playerName}!`;
+            finalScoreEl.innerText = score;
+        }
+
+        // --- EVENT LISTENERS ---
+
+        joinButton.addEventListener('click', startGame);
+
+        playAgainButton.addEventListener('click', startGame);
+
+        answerButtons.forEach(button => {
+            button.addEventListener('click', selectAnswer);
+        });
+    </script>
 </body>
 </html>
