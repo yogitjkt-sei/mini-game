@@ -254,7 +254,8 @@
     <div id="quiz-screen" class="screen">
         <div class="quiz-header">
             <div class="question-info">
-                Question <span id="question-count">1 / 20</span> </div>
+                Question <span id="question-count">1 / 5</span>
+            </div>
             <div class="score-info">
                 Score: <span id="score">0</span>
             </div>
@@ -291,12 +292,11 @@
     </div>
 
     <footer id="main-footer">
-        &copy; 2024 Quick Quiz. All rights reserved. | Created by **Team TKJ Crewmate**
+        &copy; 2024 Quick Quiz. All rights reserved. | Created by Team TKJ Crewmate | YogiAbigail
     </footer>
     <script>
-        // --- QUESTION DATABASE (TOTAL 50 QUESTIONS) ---
-        // Questions are about General Knowledge and IT/TKJ related topics.
-        const allQuestions = [
+        // --- QUESTION DATABASE (TOTAL 20 QUESTIONS) ---
+        const questions = [
             {
                 question: "Which one is NOT a fruit?",
                 answers: [
@@ -476,462 +476,10 @@
                     { text: "Google Chrome", correct: false },
                     { text: "Safari", correct: false }
                 ]
-            },
-            
-            // --- 30 NEW QUESTIONS (IT/GENERAL KNOWLEDGE) ---
-            {
-                question: "What is the default port number for HTTP?",
-                answers: [
-                    { text: "21", correct: false },
-                    { text: "80", correct: true },
-                    { text: "443", correct: false },
-                    { text: "23", correct: false }
-                ]
-            },
-            {
-                question: "What is a major characteristic of a **router**?",
-                answers: [
-                    { text: "Connects devices in a single LAN", correct: false },
-                    { text: "Directs data packets between computer networks", correct: true },
-                    { text: "Amplifies the signal in a network cable", correct: false },
-                    { text: "Translates domain names to IP addresses", correct: false }
-                ]
-            },
-            {
-                question: "What does **RAM** stand for in computing?",
-                answers: [
-                    { text: "Read-Access Memory", correct: false },
-                    { text: "Random Access Module", correct: false },
-                    { text: "Read-Only Memory", correct: false },
-                    { text: "Random Access Memory", correct: true }
-                ]
-            },
-            {
-                question: "Which protocol is used for sending email?",
-                answers: [
-                    { text: "POP3", correct: false },
-                    { text: "IMAP", correct: false },
-                    { text: "SMTP", correct: true },
-                    { text: "FTP", correct: false }
-                ]
-            },
-            {
-                question: "What is the main purpose of a firewall?",
-                answers: [
-                    { text: "To increase internet speed", correct: false },
-                    { text: "To prevent unauthorized access to a network", correct: true },
-                    { text: "To store system data", correct: false },
-                    { text: "To display graphics on a monitor", correct: false }
-                ]
-            },
-            {
-                question: "What is the maximum speed of a Fast Ethernet connection?",
-                answers: [
-                    { text: "10 Mbps", correct: false },
-                    { text: "100 Mbps", correct: true },
-                    { text: "1 Gbps", correct: false },
-                    { text: "10 Gbps", correct: false }
-                ]
-            },
-            {
-                question: "In networking, what does **DNS** translate?",
-                answers: [
-                    { text: "Data to Binary", correct: false },
-                    { text: "Domain Names to IP Addresses", correct: true },
-                    { text: "Text to Voice", correct: false },
-                    { text: "URL to HTML", correct: false }
-                ]
-            },
-            {
-                question: "Which type of cable is most commonly used for long-distance data transmission?",
-                answers: [
-                    { text: "Coaxial Cable", correct: false },
-                    { text: "Twisted-Pair Cable", correct: false },
-                    { text: "Fiber Optic Cable", correct: true },
-                    { text: "USB Cable", correct: false }
-                ]
-            },
-            {
-                question: "Which programming language is mainly used for styling web pages?",
-                answers: [
-                    { text: "JavaScript", correct: false },
-                    { text: "Python", correct: false },
-                    { text: "CSS", correct: true },
-                    { text: "PHP", correct: false }
-                ]
-            },
-            {
-                question: "What is the primary function of a **CPU**?",
-                answers: [
-                    { text: "Storing data permanently", correct: false },
-                    { text: "Executing instructions and performing calculations", correct: true },
-                    { text: "Displaying the graphical interface", correct: false },
-                    { text: "Connecting to the internet", correct: false }
-                ]
-            },
-            {
-                question: "What is the function of the **ping** command?",
-                answers: [
-                    { text: "Transferring files", correct: false },
-                    { text: "Checking network connectivity", correct: true },
-                    { text: "Configuring a router", correct: false },
-                    { text: "Encrypting data packets", correct: false }
-                ]
-            },
-            {
-                question: "What layer of the OSI model is responsible for logical addressing (IP addresses)?",
-                answers: [
-                    { text: "Physical Layer", correct: false },
-                    { text: "Data Link Layer", correct: false },
-                    { text: "Network Layer", correct: true },
-                    { text: "Transport Layer", correct: false }
-                ]
-            },
-            {
-                question: "What is the term for a malicious program that replicates itself and spreads to other computers?",
-                answers: [
-                    { text: "Trojan Horse", correct: false },
-                    { text: "Spyware", correct: false },
-                    { text: "Virus", correct: true },
-                    { text: "Adware", correct: false }
-                ]
-            },
-            {
-                question: "Which web address component specifies the type of organization (e.g., commercial)?",
-                answers: [
-                    { text: "Protocol (e.g., http://)", correct: false },
-                    { text: "Subdomain (e.g., www.)", correct: false },
-                    { text: "Top-Level Domain (e.g., .com)", correct: true },
-                    { text: "Path (e.g., /index.html)", correct: false }
-                ]
-            },
-            {
-                question: "What is the purpose of **DHCP** in a network?",
-                answers: [
-                    { text: "Encrypting network traffic", correct: false },
-                    { text: "Assigning IP addresses automatically", correct: true },
-                    { text: "Monitoring web usage", correct: false },
-                    { text: "Blocking malicious websites", correct: false }
-                ]
-            },
-            {
-                question: "Which storage device is generally faster: HDD or SSD?",
-                answers: [
-                    { text: "HDD (Hard Disk Drive)", correct: false },
-                    { text: "SSD (Solid State Drive)", correct: true },
-                    { text: "They are the same speed", correct: false },
-                    { text: "CD-ROM", correct: false }
-                ]
-            },
-            {
-                question: "Which port is commonly used for secure web browsing (HTTPS)?",
-                answers: [
-                    { text: "80", correct: false },
-                    { text: "443", correct: true },
-                    { text: "25", correct: false },
-                    { text: "21", correct: false }
-                ]
-            },
-            {
-                question: "What is a 'Bug' in programming?",
-                answers: [
-                    { text: "A feature that users love", correct: false },
-                    { text: "An error or fault in a computer program", correct: true },
-                    { text: "A type of database", correct: false },
-                    { text: "The name of a popular website", correct: false }
-                ]
-            },
-            {
-                question: "What does **ISP** stand for?",
-                answers: [
-                    { text: "Internal Server Protocol", correct: false },
-                    { text: "Internet Service Provider", correct: true },
-                    { text: "Information Security Policy", correct: false },
-                    { text: "Integrated System Performance", correct: false }
-                ]
-            },
-            {
-                question: "What is the binary representation of the decimal number **5**?",
-                answers: [
-                    { text: "1010", correct: false },
-                    { text: "0101", correct: false },
-                    { text: "101", correct: true },
-                    { text: "110", correct: false }
-                ]
-            },
-            {
-                question: "Which one is an operating system?",
-                answers: [
-                    { text: "Adobe Photoshop", correct: false },
-                    { text: "Microsoft Excel", correct: false },
-                    { text: "Linux", correct: true },
-                    { text: "Google Chrome", correct: false }
-                ]
-            },
-            {
-                question: "What is the standard twisted-pair cable connector for Ethernet?",
-                answers: [
-                    { text: "VGA", correct: false },
-                    { text: "HDMI", correct: false },
-                    { text: "RJ-45", correct: true },
-                    { text: "USB-C", correct: false }
-                ]
-            },
-            {
-                question: "What is the term for converting human-readable data into an unreadable format to secure it?",
-                answers: [
-                    { text: "Compression", correct: false },
-                    { text: "Decryption", correct: false },
-                    { text: "Encryption", correct: true },
-                    { text: "Encoding", correct: false }
-                ]
-            },
-            {
-                question: "Which component is often considered the 'brain' of the computer?",
-                answers: [
-                    { text: "GPU", correct: false },
-                    { text: "RAM", correct: false },
-                    { text: "CPU", correct: true },
-                    { text: "Hard Drive", correct: false }
-                ]
-            },
-            {
-                question: "What does **Wi-Fi** primarily use to transmit data?",
-                answers: [
-                    { text: "Infrared light", correct: false },
-                    { text: "Radio waves", correct: true },
-                    { text: "Laser beams", correct: false },
-                    { text: "Coaxial cable", correct: false }
-                ]
-            },
-            {
-                question: "What is the decimal equivalent of the binary number **10**?",
-                answers: [
-                    { text: "1", correct: false },
-                    { text: "2", correct: true },
-                    { text: "3", correct: false },
-                    { text: "10", correct: false }
-                ]
-            },
-            {
-                question: "What is the name of the worldwide system of interconnected computer networks?",
-                answers: [
-                    { text: "Intranet", correct: false },
-                    { text: "Ethernet", correct: false },
-                    { text: "The Internet", correct: true },
-                    { text: "Local Area Network", correct: false }
-                ]
-            },
-            {
-                question: "Which of these is a popular version control system?",
-                answers: [
-                    { text: "Apache", correct: false },
-                    { text: "MySQL", correct: false },
-                    { text: "Git", correct: true },
-                    { text: "Node.js", correct: false }
-                ]
-            },
-            {
-                question: "What is the smallest unit of digital information?",
-                answers: [
-                    { text: "Byte", correct: false },
-                    { text: "Kilobyte", correct: false },
-                    { text: "Bit", correct: true },
-                    { text: "Gigabyte", correct: false }
-                ]
-            },
-            {
-                question: "What is the purpose of the 'break' statement in programming loops?",
-                answers: [
-                    { text: "To skip the current iteration", correct: false },
-                    { text: "To start a new loop", correct: false },
-                    { text: "To immediately exit the loop", correct: true },
-                    { text: "To print a message", correct: false }
-                ]
-            },
-            {
-                question: "What type of connector is typically used for a modern computer monitor?",
-                answers: [
-                    { text: "RJ-45", correct: false },
-                    { text: "PS/2", correct: false },
-                    { text: "HDMI / DisplayPort", correct: true },
-                    { text: "Parallel Port", correct: false }
-                ]
-            },
-            {
-                question: "The term **LAN** stands for...",
-                answers: [
-                    { text: "Large Area Network", correct: false },
-                    { text: "Local Area Network", correct: true },
-                    { text: "Long Access Node", correct: false },
-                    { text: "Limited Access Network", correct: false }
-                ]
-            },
-            {
-                question: "What is Phishing?",
-                answers: [
-                    { text: "A type of computer virus", correct: false },
-                    { text: "Sending fake emails to trick users into revealing information", correct: true },
-                    { text: "A network cable standard", correct: false },
-                    { text: "The process of debugging code", correct: false }
-                ]
-            },
-            {
-                question: "Which command-line utility shows the route a packet takes to reach a host?",
-                answers: [
-                    { text: "ipconfig", correct: false },
-                    { text: "ping", correct: false },
-                    { text: "tracert (traceroute)", correct: true },
-                    { text: "netstat", correct: false }
-                ]
-            },
-            {
-                question: "What is the main function of the **BIOS**?",
-                answers: [
-                    { text: "To store user files", correct: false },
-                    { text: "To load the operating system when the computer starts", correct: true },
-                    { text: "To manage all running applications", correct: false },
-                    { text: "To display 3D graphics", correct: false }
-                ]
-            },
-            {
-                question: "What does **PDF** stand for?",
-                answers: [
-                    { text: "Public Data File", correct: false },
-                    { text: "Portable Document Format", correct: true },
-                    { text: "Program Data File", correct: false },
-                    { text: "Printer Display Function", correct: false }
-                ]
-            },
-            {
-                question: "Which device operates at Layer 2 (Data Link) of the OSI model?",
-                answers: [
-                    { text: "Router", correct: false },
-                    { text: "Hub", correct: false },
-                    { text: "Switch", correct: true },
-                    { text: "Gateway", correct: false }
-                ]
-            },
-            {
-                question: "What is a **variable** in programming?",
-                answers: [
-                    { text: "A type of error", correct: false },
-                    { text: "A reserved keyword", correct: false },
-                    { text: "A storage location for data values", correct: true },
-                    { text: "A function name", correct: false }
-                ]
-            },
-            {
-                question: "Which cloud service model provides networking, storage, and operating systems, but not applications?",
-                answers: [
-                    { text: "SaaS (Software as a Service)", correct: false },
-                    { text: "PaaS (Platform as a Service)", correct: false },
-                    { text: "IaaS (Infrastructure as a Service)", correct: true },
-                    { text: "FaaS (Function as a Service)", correct: false }
-                ]
-            },
-            {
-                question: "What term describes the unauthorized act of gaining access to a computer system or network?",
-                answers: [
-                    { text: "Debugging", correct: false },
-                    { text: "Hacking", correct: true },
-                    { text: "Compiling", correct: false },
-                    { text: "Cloning", correct: false }
-                ]
-            },
-            {
-                question: "Which company created the **Android** operating system?",
-                answers: [
-                    { text: "Apple", correct: false },
-                    { text: "Microsoft", correct: false },
-                    { text: "Google", correct: true },
-                    { text: "Samsung", correct: false }
-                ]
-            },
-            {
-                question: "What is the file extension for a standard Python source code file?",
-                answers: [
-                    { text: ".html", correct: false },
-                    { text: ".py", correct: true },
-                    { text: ".js", correct: false },
-                    { text: ".cpp", correct: false }
-                ]
-            },
-            {
-                question: "Which part of the URL specifies the resource location on the server?",
-                answers: [
-                    { text: "Domain Name", correct: false },
-                    { text: "Protocol", correct: false },
-                    { text: "Path", correct: true },
-                    { text: "Port Number", correct: false }
-                ]
-            },
-            {
-                question: "What is the process of finding and fixing errors in code called?",
-                answers: [
-                    { text: "Compiling", correct: false },
-                    { text: "Executing", correct: false },
-                    { text: "Debugging", correct: true },
-                    { text: "Integrating", correct: false }
-                ]
-            },
-            {
-                question: "Which of the following is an example of a **NoSQL** database?",
-                answers: [
-                    { text: "PostgreSQL", correct: false },
-                    { text: "Microsoft SQL Server", correct: false },
-                    { text: "MySQL", correct: false },
-                    { text: "MongoDB", correct: true }
-                ]
-            },
-            {
-                question: "What is a **malware** that holds data hostage and demands payment?",
-                answers: [
-                    { text: "Adware", correct: false },
-                    { text: "Ransomware", correct: true },
-                    { text: "Worm", correct: false },
-                    { text: "Rootkit", correct: false }
-                ]
-            },
-            {
-                question: "What is the maximum number of devices that can connect to a Wi-Fi access point simultaneously?",
-                answers: [
-                    { text: "5", correct: false },
-                    { text: "10", correct: false },
-                    { text: "Depends on the device/router capacity", correct: true },
-                    { text: "Unlimited", correct: false }
-                ]
-            },
-            {
-                question: "What is the function of the **alt** attribute in an HTML image tag (`<img>`)?",
-                answers: [
-                    { text: "Specifies the image size", correct: false },
-                    { text: "Sets the border color", correct: false },
-                    { text: "Provides alternative text for screen readers/when image fails to load", correct: true },
-                    { text: "Defines the image source", correct: false }
-                ]
-            },
-            {
-                question: "Which CSS property is used to change the background color of an element?",
-                answers: [
-                    { text: "color", correct: false },
-                    { text: "text-align", correct: false },
-                    { text: "background-color", correct: true },
-                    { text: "font-size", correct: false }
-                ]
-            },
-            {
-                question: "In JavaScript, which keyword is used to declare a block-scoped variable?",
-                answers: [
-                    { text: "var", correct: false },
-                    { text: "const", correct: true },
-                    { text: "new", correct: false },
-                    { text: "function", correct: false }
             }
         ];
 
         // --- GAME SETTINGS ---
-        const QUESTIONS_TO_ASK = 20; // Ditetapkan menjadi 20
         const QUESTION_TIME_LIMIT = 10;
         const POINTS_PER_SECOND = 50;
 
@@ -967,7 +515,6 @@
         let timeLeft = QUESTION_TIME_LIMIT;
         let timerInterval = null;
         let playerName = "Player";
-        let currentQuizQuestions = []; // New array to hold the 20 selected questions
         
         const answerSymbols = ['A', 'B', 'C', 'D'];
 
@@ -988,11 +535,8 @@
             currentQuestionIndex = 0;
             score = 0;
             
-            // 1. Shuffle ALL questions
-            shuffleArray(allQuestions);
-            
-            // 2. Select only the first 'QUESTIONS_TO_ASK' questions (which are now random)
-            currentQuizQuestions = allQuestions.slice(0, QUESTIONS_TO_ASK);
+            // Shuffle the questions order
+            shuffleArray(questions);
             
             lobbyScreen.classList.remove('active');
             resultsScreen.classList.remove('active');
@@ -1004,20 +548,20 @@
         function loadQuestion() {
             resetFeedback();
             
-            // Check against the length of the SELECTED questions
-            if (currentQuestionIndex >= currentQuizQuestions.length) {
+            // Check if all questions have been answered
+            if (currentQuestionIndex >= questions.length) {
                 showResults();
                 return;
             }
             
-            let currentQuestion = currentQuizQuestions[currentQuestionIndex];
+            let currentQuestion = questions[currentQuestionIndex];
             
             // Shuffle the answers order for the current question
             shuffleArray(currentQuestion.answers);
             
             questionTitleEl.innerText = currentQuestion.question;
             // Display question count: (Question X / Total Questions)
-            questionCountEl.innerText = `${currentQuestionIndex + 1} / ${currentQuizQuestions.length}`; 
+            questionCountEl.innerText = `${currentQuestionIndex + 1} / ${questions.length}`; 
             scoreEl.innerText = score;
             
             for (let i = 0; i < currentQuestion.answers.length; i++) {
